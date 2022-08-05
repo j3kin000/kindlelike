@@ -54,12 +54,24 @@ const App = () => {
   return (
     <View style={{flex: 1, padding: 30}}>
       {content === '' ? (
-        <FlatList
-          data={books}
-          renderItem={renderContent}
-          columnWrapperStyle={{justifyContent: 'space-between'}}
-          numColumns={2}
-        />
+        <View>
+          <Text
+            style={{
+              padding: 10,
+              margin: 10,
+              fontSize: 18,
+              fontWeight: 'bold',
+              alignSelf: 'center',
+            }}>
+            Kindle Like Application
+          </Text>
+          <FlatList
+            data={books}
+            renderItem={renderContent}
+            columnWrapperStyle={{justifyContent: 'space-between'}}
+            numColumns={2}
+          />
+        </View>
       ) : (
         <ScrollView>
           <TouchableOpacity
