@@ -10,16 +10,19 @@ import React, {useEffect, useState} from 'react';
 import RNFS from 'react-native-fs';
 import {BookList} from './src/Data/books';
 import {dimensions} from './src/utiility/utils';
+import Carousel from 'react-native-snap-carousel';
 
+const ITEM_WIDTH = Math.round(dimensions.windowHeight * 0.7);
 const App = () => {
   const [books, setBooks] = useState(BookList);
   const [content, setContent] = useState();
-
+  const [index, setIndex] = useState();
+  const isCarousel = React.useRef();
   function readFile(book) {
     if (Platform.OS == 'ios') {
       RNFS.readFile(`${RNFS.MainBundlePath}/assets/${book}.txt`)
         .then(res => {
-          setContent(res);
+          setContent(res.match(/.{1,100000}/g));
         })
         .catch(err => {
           console.log(err.message, err.code);
@@ -27,7 +30,7 @@ const App = () => {
     } else if (Platform.OS == 'android') {
       RNFS.readFileAssets(`${book}.txt`)
         .then(res => {
-          setContent(res);
+          setContent(res.match(/.{1,100000}/g));
         })
         .catch(err => {
           console.log(err.message, err.code);
@@ -50,7 +53,13 @@ const App = () => {
       </Text>
     </TouchableOpacity>
   );
-
+  const renderItem = ({item}) => {
+    return (
+      <ScrollView style={styles.itemContainer}>
+        <Text style={styles.content}>{item}</Text>
+      </ScrollView>
+    );
+  };
   return (
     <View style={{flex: 1, padding: 30}}>
       {content === '' ? (
@@ -73,7 +82,7 @@ const App = () => {
           />
         </View>
       ) : (
-        <ScrollView>
+        <View>
           <TouchableOpacity
             style={{
               alignSelf: 'flex-start',
@@ -89,8 +98,19 @@ const App = () => {
               Return
             </Text>
           </TouchableOpacity>
-          <Text>{content}</Text>
-        </ScrollView>
+          <Carousel
+            ref={isCarousel}
+            data={content}
+            renderItem={renderItem}
+            sliderWidth={dimensions.windowWidth}
+            itemWidth={dimensions.windowWidth}
+            containerCustomStyle={styles.carouselContainer}
+            inactiveSlideShift={0}
+            onSnapToItem={index => setIndex(index)}
+            useScrollView={true}
+          />
+          <Text style={styles.counter}>{index}</Text>
+        </View>
       )}
     </View>
   );
@@ -98,4 +118,19 @@ const App = () => {
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  itemContainer: {
+    width: dimensions.windowWidth * 0.9,
+    height: dimensions.windowHeight * 0.7,
+  },
+  content: {
+    marginHorizontal: 10,
+    fontSize: Platform.OS == 'ios' ? 18 : 24,
+  },
+  counter: {
+    marginTop: 25,
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
