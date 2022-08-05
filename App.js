@@ -16,9 +16,6 @@ const App = () => {
   const [content, setContent] = useState();
 
   function readFile(book) {
-    if (book == '0') {
-      return;
-    }
     if (Platform.OS == 'ios') {
       RNFS.readFile(`${RNFS.MainBundlePath}/assets/${book}.txt`)
         .then(res => {

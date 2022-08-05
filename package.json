@@ -10,12 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "link": "^1.5.1",
     "react": "18.0.0",
     "react-native": "^0.69.3",
-    "react-native-fs": "^2.20.0",
-    "react-native-paper": "^4.12.4",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-fs": "^2.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
