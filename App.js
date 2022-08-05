@@ -19,6 +19,7 @@ const App = () => {
   const [index, setIndex] = useState();
   const isCarousel = React.useRef();
   function readFile(book) {
+    setIndex(0);
     if (Platform.OS == 'ios') {
       RNFS.readFile(`${RNFS.MainBundlePath}/assets/${book}.txt`)
         .then(res => {
